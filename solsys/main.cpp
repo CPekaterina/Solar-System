@@ -16,6 +16,7 @@ void write(double *z, double *y, int n, char *file);
 //time - year, mass - sun mass, distance - AU
 
 void RK4(double *vx,double *vy,double *x,double *y,int n,double h);
+void Verlet(double *vx, double *vy, double *x, double *y, int n, double h);
 
 int main()
 {
@@ -41,6 +42,10 @@ int main()
    y[0]=0;
 
    //RK4(vx,vy,x,y,n,h);
+<<<<<<< HEAD
+=======
+   Verlet(vx,vy,x,y,n,h);
+>>>>>>> origin/master
 
    //write (x,y,n,"xout.dat");
 
@@ -81,6 +86,22 @@ void RK4(double *vx,double *vy,double *x,double *y,int n,double h)
 
     }
 return;
+}
+
+void Verlet(double *vx, double *vy, double *x, double *y, int n, double h)
+{
+    //calculate first step with taylorexpansion
+
+    x[1] = x[0] + vx[0]*h + 0.5*h*h*forcex(x[0],y[0]);
+    y[1] = y[0] + vy[0]*h + 0.5*h*h*forcey(x[0],y[0]);
+
+    for(int i=1; i<n-1; i++)
+    {
+        x[i+1] = 2*x[i] - x[i-1] + h*h*forcex(x[i],y[i]);
+        y[i+1] = 2*y[i] - y[i-1] + h*h*forcey(x[i],y[i]);
+
+     }
+    return;
 }
 
 double forcex(double x,double y)
