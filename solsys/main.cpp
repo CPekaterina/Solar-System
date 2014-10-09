@@ -2,6 +2,7 @@
 #include <cmath>
 #include <fstream>
 #include <iomanip>
+#include <planet.h>
 
 using namespace std;
 
@@ -39,9 +40,11 @@ int main()
    x[0]=1;
    y[0]=0;
 
-   RK4(vx,vy,x,y,n,h);
+   //RK4(vx,vy,x,y,n,h);
 
-   write (x,y,n,"xout.dat");
+   //write (x,y,n,"xout.dat");
+
+   planet erde(10e-6,17,3,4,5,n);
 
     return 0;
 }
