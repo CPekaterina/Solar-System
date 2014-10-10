@@ -10,6 +10,7 @@ private:
     double G = 4*pi*pi;
 
 public:
+    planet();
     planet(double m, int n);
     planet(double m, double x, double y, int n);
     planet(double m, double x, double y, double vx, double vy, int n);
@@ -21,8 +22,8 @@ public:
     //vector f;
 
     void RK4(planet *planets, int p, int n, double h);
-    void force(planet *planets, int p, int j, int i, vector f);
-    void RK4step(vector force,planet *planets, int j, int i, double h);
+    void force(planet *planets,int p, int j, int i,vector *f,vector l);
+    void RK4step(vector *f,planet *planets, int p, int j,double h, int i);
 
 };
 

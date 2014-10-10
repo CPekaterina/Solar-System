@@ -15,7 +15,7 @@ void write(double *z, double *y, int n, char *file);
 
 //time - year, mass - sun mass, distance - AU
 
-void RK4(double *vx,double *vy,double *x,double *y,int n,double h);
+//void RK4(double *vx,double *vy,double *x,double *y,int n,double h);
 void Verlet(double *vx, double *vy, double *x, double *y, int n, double h);
 
 int main()
@@ -27,7 +27,7 @@ int main()
    double *y;
 
    double h=0.00001;
-   int n=100000; //How many steps?
+   int n=100; //How many steps?
    double maxtime = h*double(n);
 
 
@@ -42,19 +42,37 @@ int main()
    y[0]=0;
 
    //RK4(vx,vy,x,y,n,h);
-<<<<<<< HEAD
-=======
-   Verlet(vx,vy,x,y,n,h);
->>>>>>> origin/master
+
+   //Verlet(vx,vy,x,y,n,h);
 
    //write (x,y,n,"xout.dat");
 
-   planet erde(10e-6,17,3,4,5,n);
+   planet planets[2];
+
+   planet erde(10e-6,1,0,0,2*pi,n);
+   planet sonne(1,0,0,0,0,n);
+   planets[0]=erde;
+   planets[1]=sonne;
+
+   erde.RK4(planets,2,n,h);
+
+   double *X,*Y;
+   X= new double[n];
+   Y= new double[n];
+
+   for(int i=0;i<n;i++)
+   {
+       X[i]=erde.R[i].x;
+       Y[i]=erde.R[i].y;
+   }
+   write(X,Y,n,"xout.dat");
+
+
 
     return 0;
 }
 
-void RK4(double *vx,double *vy,double *x,double *y,int n,double h)
+/* void RK4(double *vx,double *vy,double *x,double *y,int n,double h)
 {
     double k1vx,k2vx,k3vx,k4vx,k1vy,k2vy,k3vy,k4vy;
     double k1x,k2x,k3x,k4x,k1y,k2y,k3y,k4y;
@@ -87,7 +105,7 @@ void RK4(double *vx,double *vy,double *x,double *y,int n,double h)
     }
 return;
 }
-
+*/
 void Verlet(double *vx, double *vy, double *x, double *y, int n, double h)
 {
     //calculate first step with taylorexpansion
