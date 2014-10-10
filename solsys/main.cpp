@@ -57,7 +57,13 @@ int main()
    planet sonne(1,0,0,0,-0.000005,n);
    planets[0]=erde;
    planets[1]=sonne;
+<<<<<<< HEAD
    erde.RK4(planets,2,n,h);
+=======
+
+  //erde.RK4(planets,2,n,h);
+  erde.Verlet(planets,2,n,h);
+>>>>>>> origin/master
 
 
    erde.RXYwrite(n,"erde.dat");

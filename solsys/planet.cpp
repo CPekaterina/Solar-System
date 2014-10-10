@@ -75,6 +75,7 @@ void planet::force(planet *planets,int p, int j, int i,vector *f,vector l)
     double y= planets[j].R[i].y+l.y;
     for(int k=0; (k<p);k++)
     {
+<<<<<<< HEAD
         if(k!=j)
         {
             double dx=x-planets[k].R[i].x;
@@ -87,11 +88,15 @@ void planet::force(planet *planets,int p, int j, int i,vector *f,vector l)
           // cout << "zwischenKraft: "<<f->x << " " << f->y << endl;
             //cout << planets[k].mass << endl;
             //cout << planets[j].mass << endl;
+=======
+        double dx=x-planets[k].R[i].x;
+        double dy=y-planets[k].R[i].y;
+      //cout << "dx: " << dx << ", dy:" << dy <<endl;
+>>>>>>> origin/master
 
         }
 
      }
-
 }
 void planet::RK4step(vector *f,planet *planets, int p, int j,double h, int i)
 {
@@ -151,6 +156,7 @@ void planet::RK4step(vector *f,planet *planets, int p, int j,double h, int i)
 
 }
 
+<<<<<<< HEAD
 void planet::RXYwrite(int n, char *file)
 {
     ofstream resout;
@@ -160,6 +166,37 @@ void planet::RXYwrite(int n, char *file)
         resout << setprecision(15) << setw(19) << R[i].x << " " << setprecision(15) << setw(19) << R[i].y << endl;
     }
     resout.close();
+=======
+void planet::Verlet(planet *planets, int p, int n, double h)
+{
+    vector l{0,0};
+
+    for(int j=0;j<p;j++)
+    {
+        vector f;
+
+        force(planets,p,j,0,&f,l);
+
+        planets[j].R[1].x = planets[j].R[0].x + planets[j].V[0].x*h + 0.5*h*h*f.x;
+        planets[j].R[1].y = planets[j].R[0].y + planets[j].V[0].y*h + 0.5*h*h*f.y;
+    }
+
+    for(int i=1;i<n-1;i++)
+    {
+        for(int j=0;j<p;j++){
+
+            vector f;
+            force(planets,p,j,i,&f,l);
+
+            planets[j].R[i+1].x = 2*planets[j].R[i].x - planets[j].R[i-1].x + h*h*f.x;
+            planets[j].R[i+1].y = 2*planets[j].R[i].y - planets[j].R[i-1].y + h*h*f.y;
+
+        }
+    }
+}
+
+
+>>>>>>> origin/master
 
 }
 
