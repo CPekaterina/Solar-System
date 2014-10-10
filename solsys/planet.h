@@ -24,6 +24,8 @@ public:
     void RK4(planet *planets, int p, int n, double h);
     void force(planet *planets,int p, int j, int i,vector *f,vector l);
     void RK4step(vector *f,planet *planets, int p, int j,double h, int i);
+    void RXYwrite(int n, char *file);
+    void VXYwrite(int n, char *file);
 
 };
 
