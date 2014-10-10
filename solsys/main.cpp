@@ -54,7 +54,8 @@ int main()
    planets[0]=erde;
    planets[1]=sonne;
 
-   erde.RK4(planets,2,n,h);
+  //erde.RK4(planets,2,n,h);
+  erde.Verlet(planets,2,n,h);
 
    double *X,*Y;
    X= new double[n];

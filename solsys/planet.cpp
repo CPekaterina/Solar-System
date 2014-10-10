@@ -73,14 +73,13 @@ void planet::force(planet *planets,int p, int j, int i,vector *f,vector l)
     {
         double dx=x-planets[k].R[i].x;
         double dy=y-planets[k].R[i].y;
-      cout << "dx: " << dx << ", dy:" << dy <<endl;
+      //cout << "dx: " << dx << ", dy:" << dy <<endl;
 
         double r=sqrt(dx*dx+dy*dy);
         f->x += -G*planets[k].mass*dx/(r*r*r);
         f->y += -G*planets[k].mass*dy/(r*r*r);
 
      }
-
 }
 void planet::RK4step(vector *f,planet *planets, int p, int j,double h, int i)
 {
@@ -129,6 +128,35 @@ void planet::RK4step(vector *f,planet *planets, int p, int j,double h, int i)
    planets->R[i+1].y=planets->R[i].y+1./6.*(k1.y+2*k2.y+2*k3.y+k4.y);
 
 }
+
+void planet::Verlet(planet *planets, int p, int n, double h)
+{
+    vector l{0,0};
+
+    for(int j=0;j<p;j++)
+    {
+        vector f;
+
+        force(planets,p,j,0,&f,l);
+
+        planets[j].R[1].x = planets[j].R[0].x + planets[j].V[0].x*h + 0.5*h*h*f.x;
+        planets[j].R[1].y = planets[j].R[0].y + planets[j].V[0].y*h + 0.5*h*h*f.y;
+    }
+
+    for(int i=1;i<n-1;i++)
+    {
+        for(int j=0;j<p;j++){
+
+            vector f;
+            force(planets,p,j,i,&f,l);
+
+            planets[j].R[i+1].x = 2*planets[j].R[i].x - planets[j].R[i-1].x + h*h*f.x;
+            planets[j].R[i+1].y = 2*planets[j].R[i].y - planets[j].R[i-1].y + h*h*f.y;
+
+        }
+    }
+}
+
 
 
 
