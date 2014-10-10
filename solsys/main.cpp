@@ -27,7 +27,7 @@ int main()
    double *y;
 
    double h=0.0001;
-   int n=40000; //How many steps?
+   int n=10000; //How many steps?
    double maxtime = h*double(n);
 
 
@@ -42,28 +42,22 @@ int main()
    y[0]=0;
 
    RK4(vx,vy,x,y,n,h);
- /* for(int i=0 ;i<n;i++)
-   {
-       cout << "RK4: " << x[i] << "||" << y[i] <<endl;
-   }
-*/
+
    //Verlet(vx,vy,x,y,n,h);
 
    //write (x,y,n,"xout.dat");
 
    planet planets[2];
 
-   planet erde(3*1e-6,1,0,0,sqrt(3)*2*pi,n);
+   planet erde(3*1e-6,1,0,0,2*pi,n);
    planet sonne(1,0,0,0,-0.000005,n);
    planets[0]=erde;
    planets[1]=sonne;
-<<<<<<< HEAD
-   erde.RK4(planets,2,n,h);
-=======
 
-  //erde.RK4(planets,2,n,h);
-  erde.Verlet(planets,2,n,h);
->>>>>>> origin/master
+
+   erde.RK4(planets,2,n,h);
+
+ //erde.Verlet(planets,2,n,h);
 
 
    erde.RXYwrite(n,"erde.dat");
