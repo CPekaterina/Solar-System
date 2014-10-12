@@ -20,6 +20,7 @@ void Verlet(double *vx, double *vy, double *x, double *y, int n, double h);
 
 int main()
 {
+
    double m_S=1;
    double *vx;
    double *vy;
@@ -27,7 +28,7 @@ int main()
    double *y;
 
    double h=0.0001;
-   int n=10000; //How many steps?
+   int n=11000; //How many steps?
    double maxtime = h*double(n);
 
 
@@ -41,28 +42,30 @@ int main()
    x[0]=1;
    y[0]=0;
 
-   RK4(vx,vy,x,y,n,h);
+   //RK4(vx,vy,x,y,n,h);
 
    //Verlet(vx,vy,x,y,n,h);
 
    //write (x,y,n,"xout.dat");
 
-   planet planets[2];
+   planet planets[3];
 
    planet erde(3*1e-6,1,0,0,2*pi,n);
    planet sonne(1,0,0,0,-0.000005,n);
+   planet jupiter(1e-3,5,0,0,10./12.*pi,n);
    planets[0]=erde;
    planets[1]=sonne;
+   planets[2]=jupiter;
 
 
-   erde.RK4(planets,2,n,h);
+   erde.RK4(planets,3,n,h);
 
  //erde.Verlet(planets,2,n,h);
 
 
    erde.RXYwrite(n,"erde.dat");
    sonne.RXYwrite(n,"sonne.dat");
-
+   jupiter.RXYwrite(n,"jupiter.dat");
 
 
     return 0;
