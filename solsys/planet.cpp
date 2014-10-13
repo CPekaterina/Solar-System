@@ -8,7 +8,7 @@ using namespace std;
 
 planet::planet()
 {
-    mass =1;
+    mass =1.0;
     R=new vector[1];
     V=new vector[1];
     R[0].x=0;
@@ -55,11 +55,13 @@ void planet::RK4(planet *planets, int p, int n, double h)
     {
         for(int j=0; j<p;j++)
         {
-            vector f{0,0};
+            vector f{0.0,0.0};
             RK4step(&f,planets,p,j,h,i);
+
            //cout << "Kraft: "<<f.x << " " << f.y << endl;
         }
     }
+
 }
 
 struct vector {double x; double y;};
@@ -75,7 +77,7 @@ void planet::force(planet *planets,int p, int j, int i,vector *f,vector l)
     double y= planets[j].R[i].y+l.y;
     for(int k=0; (k<p);k++)
     {
-        if(k!=j)
+        if(k!=j&&j!=1)
         {
             double dx=x-planets[k].R[i].x;
             double dy=y-planets[k].R[i].y;
@@ -86,6 +88,11 @@ void planet::force(planet *planets,int p, int j, int i,vector *f,vector l)
             f->y += -G*planets[k].mass*dy/(r*r*r);
 
         }
+        if(j==1)
+        {
+            f->x=0.0;
+            f->y=0.0;
+        }
 
      }
 }
@@ -94,7 +101,7 @@ void planet::RK4step(vector *f,planet *planets, int p, int j,double h, int i)
     vector k1v,k2v,k3v,k4v;
     vector k1,k2,k3,k4;
 
-    vector l{0,0};
+    vector l{0.0,0.0};
 
     force(planets,p,j,i,f,l);
 
@@ -125,8 +132,8 @@ void planet::RK4step(vector *f,planet *planets, int p, int j,double h, int i)
 
     //cout << "force_x: " <<f->x << ", force_y: " <<f->y << endl;
 
-   planets[j].V[i+1].x=planets[j].V[i].x+1./6.*(2*k1v.x+4*k2v.x+2*k3v.x+k4v.x);
-   planets[j].V[i+1].y=planets[j].V[i].y+1./6.*(2*k1v.y+4*k2v.y+2*k3v.y+k4v.y);
+   planets[j].V[i+1].x=planets[j].V[i].x+1./6.*(2.*k1v.x+4*k2v.x+2.*k3v.x+k4v.x);
+   planets[j].V[i+1].y=planets[j].V[i].y+1./6.*(2.*k1v.y+4*k2v.y+2.*k3v.y+k4v.y);
 
     double Vx=planets[j].V[i].x;
     double Vy=planets[j].V[i].y;
@@ -140,8 +147,9 @@ void planet::RK4step(vector *f,planet *planets, int p, int j,double h, int i)
     k3.y=h*(Vy+k2.y/2.);
     k4.y=h*(Vy+k3.y);
 
-   planets[j].R[i+1].x=planets[j].R[i].x+1./6.*(k1.x+2*k2.x+2*k3.x+k4.x);
-   planets[j].R[i+1].y=planets[j].R[i].y+1./6.*(k1.y+2*k2.y+2*k3.y+k4.y);
+   planets[j].R[i+1].x=planets[j].R[i].x+1./6.*(k1.x+2.*k2.x+2.*k3.x+k4.x);
+   planets[j].R[i+1].y=planets[j].R[i].y+1./6.*(k1.y+2.*k2.y+2.*k3.y+k4.y);
+
 
    //cout << "j: " << j <<  "  Rx: " <<   planets[j].R[i+1].x << ", Ry: " <<  planets[j].R[i+1].y <<endl;
 
@@ -198,4 +206,3 @@ void planet::VXYwrite(int n, char *file)
     resout.close();
 
 }
-

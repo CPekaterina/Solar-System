@@ -6,8 +6,8 @@ class planet
 {
 private:
     double mass;
-    double pi = 3.1425926;
-    double G = 4*pi*pi;
+    double pi = 3.14159265359;
+    double G = 4.*pi*pi;
 
 public:
     planet();
@@ -19,7 +19,7 @@ public:
 
     vector *R;
     vector *V;
-    //vector f;
+    vector f;
 
     void RK4(planet *planets, int p, int n, double h);
     void force(planet *planets,int p, int j, int i,vector *f,vector l);
@@ -27,6 +27,8 @@ public:
     void RXYwrite(int n, char *file);
     void VXYwrite(int n, char *file);
     void Verlet(planet *planets, int p, int n, double h);
+    void write(double *z, double *y, int n, char *file);
+
 };
 
 #endif // PLANET_H

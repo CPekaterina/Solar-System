@@ -7,8 +7,8 @@
 using namespace std;
 
 
-const double pi= 3.1415926;
-const double G=4*pi*pi;
+const double pi= 3.14159265359;
+const double G=4.*pi*pi;
 double forcex(double x,double y);
 double forcey(double x,double y);
 void write(double *z, double *y, int n, char *file);
@@ -21,14 +21,14 @@ void Verlet(double *vx, double *vy, double *x, double *y, int n, double h);
 int main()
 {
 
-   double m_S=1;
+   double m_S=1.;
    double *vx;
    double *vy;
    double *x;
    double *y;
 
-   double h=0.0001;
-   int n=11000; //How many steps?
+   double h=1e-5;
+   int n=1e5; //How many steps?
    double maxtime = h*double(n);
 
 
@@ -50,22 +50,36 @@ int main()
 
    planet planets[3];
 
-   planet erde(3*1e-6,1,0,0,2*pi,n);
-   planet sonne(1,0,0,0,-0.000005,n);
-   planet jupiter(1e-3,5,0,0,10./12.*pi,n);
+   planet erde(3*1e-6,1.,0,0,2.*pi,n);
+   planet sonne(1,0,0,0,0,n);
+   planet jupiter(1,5,0,0,10./12.*pi,n);
    planets[0]=erde;
    planets[1]=sonne;
    planets[2]=jupiter;
 
 
-   erde.RK4(planets,3,n,h);
+   erde.RK4(planets,2,n,h);
+
+//Energy conservation
+
+   double *en,*time;
+   en= new double [n];
+   time = new double[n];
+   for (int i=0;i<n;i++)
+   {
+       double qr=erde.R[i].x*erde.R[i].x+erde.R[i].y*erde.R[i].y;
+       en[i]=/*G*m_S*3e-6/(qr)*/0.5*3e-6*(erde.V[i].x*erde.V[i].x+erde.V[i].y*erde.V[i].y);
+       time[i]=i*h;
+   }
+   write(time,en,n,"kinenergy.dat");
+
 
  //erde.Verlet(planets,2,n,h);
 
 
    erde.RXYwrite(n,"erde.dat");
-   sonne.RXYwrite(n,"sonne.dat");
-   jupiter.RXYwrite(n,"jupiter.dat");
+//   sonne.RXYwrite(n,"sonne.dat");
+//  jupiter.RXYwrite(n,"jupiter.dat");
 
 
     return 0;
