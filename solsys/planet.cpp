@@ -101,44 +101,58 @@ void planet::RK4step(vector *f,planet *planets, int p, int j,double h, int i)
     vector k1v,k2v,k3v,k4v;
     vector k1,k2,k3,k4;
 
+
+
     vector l{0.0,0.0};
+
+    double Vx=planets[j].V[i].x;
+    double Vy=planets[j].V[i].y;
 
     force(planets,p,j,i,f,l);
 
     k1v.x=h/2.*f->x;
     k1v.y=h/2.*f->y;
 
+    k1.x=h/2.*Vx;
+    k1.y=h/2.*Vy;
+
     //cout << "force_x: " <<f->x << ", force_y: " <<f->y << endl;
 
 
-    force (planets, p,j,i,f,k1v);
+    force (planets, p,j,i,f,k1);
 
     k2v.x=h/2.*f->x;
     k2v.y=h/2.*f->y;
+    k2.x=h/2.*(Vx+k1v.x);
+    k2.y=h/2.*(Vy+k1v.y);
+
 
     //cout << "force_x: " <<f->x << ", force_y: " <<f->y << endl;
 
-    force(planets, p,j,i,f,k2v);
+    force(planets, p,j,i,f,k2);
 
     k3v.x=h*f->x;
     k3v.y=h*f->y;
+    k3.x=h*(Vx+k2v.x);
+    k3.y=h*(Vy+k2v.y);
 
     //cout << "force_x: " <<f->x << ", force_y: " <<f->y << endl;
 
-    force(planets, p,j,i,f,k3v);
+    force(planets, p,j,i,f,k3);
 
     k4v.x=h*f->x;
     k4v.y=h*f->y;
+    k4.x=h*(Vx+k3v.x);
+    k4.y=h*(Vy+k3v.y);
+
 
     //cout << "force_x: " <<f->x << ", force_y: " <<f->y << endl;
 
    planets[j].V[i+1].x=planets[j].V[i].x+1./6.*(2.*k1v.x+4*k2v.x+2.*k3v.x+k4v.x);
    planets[j].V[i+1].y=planets[j].V[i].y+1./6.*(2.*k1v.y+4*k2v.y+2.*k3v.y+k4v.y);
 
-    double Vx=planets[j].V[i].x;
-    double Vy=planets[j].V[i].y;
     //cout << "j: " << j <<  "  Vx: " <<Vx << ", Vy: " << Vy <<endl;
-    k1.x=h*Vx;
+   /* k1.x=h*Vx;
     k2.x=h*(Vx+k1.x/2.);
     k3.x=h*(Vx+k2.x/2.);
     k4.x=h*(Vx+k3.x);
@@ -146,9 +160,9 @@ void planet::RK4step(vector *f,planet *planets, int p, int j,double h, int i)
     k2.y=h*(Vy+k1.y/2.);
     k3.y=h*(Vy+k2.y/2.);
     k4.y=h*(Vy+k3.y);
-
-   planets[j].R[i+1].x=planets[j].R[i].x+1./6.*(k1.x+2.*k2.x+2.*k3.x+k4.x);
-   planets[j].R[i+1].y=planets[j].R[i].y+1./6.*(k1.y+2.*k2.y+2.*k3.y+k4.y);
+*/
+   planets[j].R[i+1].x=planets[j].R[i].x+1./6.*(2.*k1.x+4.*k2.x+2.*k3.x+k4.x);
+   planets[j].R[i+1].y=planets[j].R[i].y+1./6.*(2.*k1.y+4.*k2.y+2.*k3.y+k4.y);
 
 
    //cout << "j: " << j <<  "  Rx: " <<   planets[j].R[i+1].x << ", Ry: " <<  planets[j].R[i+1].y <<endl;

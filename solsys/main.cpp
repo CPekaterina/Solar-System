@@ -27,26 +27,11 @@ int main()
    double *x;
    double *y;
 
-   double h=1e-5;
-   int n=1e5; //How many steps?
+   double h=1e-4;
+   int n=5e4; //How many steps?
    double maxtime = h*double(n);
 
-
-   vx= new double[n];
-   vy= new double[n];
-   x= new double[n];
-   y= new double[n];
-
-   vx[0]=0;
-   vy[0]=2*pi;
-   x[0]=1;
-   y[0]=0;
-
-   //RK4(vx,vy,x,y,n,h);
-
-   //Verlet(vx,vy,x,y,n,h);
-
-   //write (x,y,n,"xout.dat");
+   //planet definitions
 
    planet planets[3];
 
@@ -58,9 +43,12 @@ int main()
    planets[2]=jupiter;
 
 
-   erde.RK4(planets,2,n,h);
+ //  erde.RK4(planets,2,n,h);
+ //  erde.Verlet(planets,2,n,h);
 
-//Energy conservation
+
+// Energy conservation
+
 
    double *en,*time;
    en= new double [n];
@@ -68,87 +56,24 @@ int main()
    for (int i=0;i<n;i++)
    {
        double qr=erde.R[i].x*erde.R[i].x+erde.R[i].y*erde.R[i].y;
-       en[i]=/*G*m_S*3e-6/(qr)*/0.5*3e-6*(erde.V[i].x*erde.V[i].x+erde.V[i].y*erde.V[i].y);
+       //en[i]=0.5*3e-6*(erde.V[i].x*erde.V[i].x+erde.V[i].y*erde.V[i].y); //kin
+       //en[i]=1/qr;                                                       //pot
        time[i]=i*h;
    }
    write(time,en,n,"kinenergy.dat");
 
 
- //erde.Verlet(planets,2,n,h);
+//data production
 
 
-   erde.RXYwrite(n,"erde.dat");
-//   sonne.RXYwrite(n,"sonne.dat");
-//  jupiter.RXYwrite(n,"jupiter.dat");
+   erde.RXYwrite(n,"erdeV.dat");
+// sonne.RXYwrite(n,"sonne.dat");
+// jupiter.RXYwrite(n,"jupiter.dat");
 
 
     return 0;
 }
 
- void RK4(double *vx,double *vy,double *x,double *y,int n,double h)
-{
-    double k1vx,k2vx,k3vx,k4vx,k1vy,k2vy,k3vy,k4vy;
-    double k1x,k2x,k3x,k4x,k1y,k2y,k3y,k4y;
-    for(int i=0;i<n-1;i++)
-    {
-        k1vx=h*forcex(x[i],y[i]);
-        k1vy=h*forcey(x[i],y[i]);
-        k2vx=h*forcex(x[i]+k1vx/2.,y[i]+k1vy/2.);
-        k2vy=h*forcey(x[i]+k1vx/2.,y[i]+k1vy/2.);
-        k3vx=h*forcex(x[i]+k2vx/2.,y[i]+k2vy/2.);
-        k3vy=h*forcey(x[i]+k2vx/2.,y[i]+k2vy/2.);
-        k4vx=h*forcex(x[i]+k3vx,y[i]+k3vy);
-        k4vy=h*forcey(x[i]+k3vx,y[i]+k3vy);
-
-       vx[i+1]=vx[i]+1./6.*(k1vx+2*k2vx+2*k3vx+k4vx);
-       vy[i+1]=vy[i]+1./6.*(k1vy+2*k2vy+2*k3vy+k4vy);
-
-        k1x=h*vx[i];
-        k2x=h*(vx[i]+k1x/2.);
-        k3x=h*(vx[i]+k2x/2.);
-        k4x=h*(vx[i]+k3x);
-        k1y=h*vy[i];
-        k2y=h*(vy[i]+k1y/2.);
-        k3y=h*(vy[i]+k2y/2.);
-        k4y=h*(vy[i]+k3y);
-
-       x[i+1]=x[i]+1./6.*(k1x+2*k2x+2*k3x+k4x);
-       y[i+1]=y[i]+1./6.*(k1y+2*k2y+2*k3y+k4y);
-
-    }
-return;
-}
-
-void Verlet(double *vx, double *vy, double *x, double *y, int n, double h)
-{
-    //calculate first step with taylorexpansion
-
-    x[1] = x[0] + vx[0]*h + 0.5*h*h*forcex(x[0],y[0]);
-    y[1] = y[0] + vy[0]*h + 0.5*h*h*forcey(x[0],y[0]);
-
-    for(int i=1; i<n-1; i++)
-    {
-        x[i+1] = 2*x[i] - x[i-1] + h*h*forcex(x[i],y[i]);
-        y[i+1] = 2*y[i] - y[i-1] + h*h*forcey(x[i],y[i]);
-
-     }
-    return;
-}
-
-double forcex(double x,double y)
-{
-    double m_S=1;
-    double r=sqrt(x*x+y*y);
-    return -G*m_S*x/(r*r*r);
-}
-
-double forcey(double x,double y)
-{
-    double m_S=1;
-    double r=sqrt(x*x+y*y);
-    return -G*m_S*y/(r*r*r);
-}
-//writes two arrays in a .dat file
 
 void write(double *z, double *y, int n, char *file)
 {
