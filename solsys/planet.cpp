@@ -108,7 +108,7 @@ void planet::force(planet *planets,int p, int j, int i,vector *f,vector l)
 
         }
 
-     }
+    }
 }
 void planet::RK4step(vector *f,planet *planets, int p, int j,double h, int i)
 {
@@ -215,7 +215,6 @@ void planet::Verlet(planet *planets, int p, int n, double h)
     }
 
 }
-
 
 void planet::VXYwrite(int n, char *file)
 {
