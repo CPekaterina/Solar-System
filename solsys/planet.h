@@ -12,6 +12,7 @@ private:
 public:
     planet();
     planet(double m, int n);
+    planet(double m, double r,double v, double theta, int n);
     planet(double m, double x, double y, int n);
     planet(double m, double x, double y, double vx, double vy, int n);
 
@@ -28,6 +29,7 @@ public:
     void VXYwrite(int n, char *file);
     void Verlet(planet *planets, int p, int n, double h);
     void write(double *z, double *y, int n, char *file);
+    void com(planet *planets,int p);
 
 };
 
