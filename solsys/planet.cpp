@@ -219,3 +219,4 @@ void planet::VXYwrite(int n, char *file)
     resout.close();
 
 }
+
